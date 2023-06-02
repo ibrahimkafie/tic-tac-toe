@@ -1,14 +1,16 @@
-import { ACTIVE_GAME_STATUS, Game } from "../types";
+import { ACTIVE_GAME_STATUS, GameData } from "../types";
 
-export function generateNewGame(player1Name: string): Game {
+export function generateNewGame(player1Name: string): GameData {
     // Logic to generate a new game object
-    const newGame = {
+    return {
         player1: {
             name: player1Name,
+            marker: 'x',
             score: 0,
         },
         player2: {
             name: '',
+            marker: 'o',
             score: 0,
         },
         status: ACTIVE_GAME_STATUS,
@@ -17,6 +19,4 @@ export function generateNewGame(player1Name: string): Game {
         created: new Date(),
         currentWinner: ''
     };
-
-    return newGame;
 };

@@ -1,21 +1,28 @@
 import { FormEvent, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import { ACTIVE_GAME_STATUS, GAMES_COLLECTION_NAME, Game } from './types';
+import { ACTIVE_GAME_STATUS } from '../types';
 import { addDoc, doc, getDocs, query, updateDoc, where } from 'firebase/firestore';
 import { useGamesCollection } from '../hooks';
-import { generateNewGame } from './utils';
-import { useFirestore } from 'reactfire';
+import { deepCopy, generateNewGame } from '../utils';
 
 type NewGameFormProps = {
+  /**
+   * A callback function triggered when the form is submitted.
+   * @param playerName The name of the player starting the game..
+   * @param gameId The ID of the game being started.
+   */
   onSubmit: (playerName: string, gameId: string) => void;
 };
 
+/**
+ * A form component for starting a new game.
+ */
 export const NewGameForm = ({ onSubmit }: NewGameFormProps) => {
   const gamesCollection = useGamesCollection();
   const [playerName, setPlayerName] = useState('');
-  const firestore = useFirestore();
 
+  // Handles the form submission to start a new game
   const handleStartGame = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -27,25 +34,25 @@ export const NewGameForm = ({ onSubmit }: NewGameFormProps) => {
       const exists = !querySnapshot.empty;
 
       if (exists) {
-        // game is exists
+        // Game is exists, add player 2 to the current game:
 
-        const game = querySnapshot.docs[0].data() as Game;
-
-        const activeGameRef = doc(firestore, GAMES_COLLECTION_NAME, querySnapshot.docs[0].id);
-        const updateData = {...game};
+        const game = querySnapshot.docs[0].data();
+        const activeGameRef = doc(gamesCollection, querySnapshot.docs[0].id);
+        const updateData = deepCopy(game);
 
         // update player 2 name and make sure not match with the first player name
         updateData.player2.name = game.player1.name === playerName ? `${playerName}_2` : playerName;
         await updateDoc(activeGameRef, updateData);
         onSubmit(playerName, querySnapshot.docs[0].id);
       } else {
-        // game not exist, create new game
+        // Game not exist, create new game with the first player:
+
         const newGameData = generateNewGame(playerName);
         const newDocRef = await addDoc(gamesCollection, newGameData);
         onSubmit(playerName, newDocRef.id);
       }
     } catch (error) {
-      console.error('Error occurred:', error);
+      console.error('NewGameForm - Error occurred:', error);
     }
   };
 
@@ -62,6 +69,7 @@ export const NewGameForm = ({ onSubmit }: NewGameFormProps) => {
             classes: {
               input: 'text-center',
             },
+            autoFocus: true,
           }}
         />
         <Button type="submit" variant="contained" size="large" disabled={!playerName}>

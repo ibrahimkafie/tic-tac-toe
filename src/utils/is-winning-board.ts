@@ -1,4 +1,4 @@
-import { Game } from "../types";
+import { GameData } from "../types";
 
 // Define the winning combinations
 const WINNING_COMBINATIONS = [
@@ -7,7 +7,7 @@ const WINNING_COMBINATIONS = [
     [0, 4, 8], [2, 4, 6] // Diagonals
 ];
 
-export function isWinningBoard(board: Game['board']) {
+export function isWinningBoard(board: GameData['board']) {
 
     // Check if any winning combination is present on the board
     for (const combination of WINNING_COMBINATIONS) {

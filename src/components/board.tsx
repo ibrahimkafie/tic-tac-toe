@@ -1,14 +1,30 @@
 import BoardBox from './board-box';
-import { Game } from './types';
+import { GameData } from '../types';
 
 type BoardProps = {
-  game: Game;
+  /**
+   * The game data containing the current state of the game.
+   */
+  game: GameData;
+
+  /**
+   * A boolean indicating whether the board is disabled or not.
+   * When the board is disabled, the user cannot interact with it.
+   */
   disabled: boolean;
+
+  /**
+   * A function to update the game state when a box is clicked.
+   * It receives the index of the box that was clicked.
+   */
   update: (boxIndex: number) => void;
 };
 
+/**
+ * Renders the game board component.
+ */
 export const Board = ({ update, game, disabled }: BoardProps) => {
-  // handle make move click event
+  // Handle make move click event
   const makeMove = (row: number, col: number) => {
     const boxIndex = getValueIndex(row, col);
 
@@ -18,7 +34,9 @@ export const Board = ({ update, game, disabled }: BoardProps) => {
     }
   };
 
+  // Calculate the index of a value in the game board array based on the given row and column
   const getValueIndex = (row: number, col: number) => {
+    // Define the number of columns on the game board
     const numberOfColumns = 3;
     return row * numberOfColumns + col;
   };

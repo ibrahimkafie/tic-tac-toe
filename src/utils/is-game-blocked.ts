@@ -1,6 +1,6 @@
-import { Game } from "../types";
+import { GameData } from "../types";
 
-export function isGameBlocked(board: Game['board']) {
+export function isGameBlocked(board: GameData['board']) {
     // Check if there are any empty positions on the board
     for (const position of board) {
         if (position === "") {
