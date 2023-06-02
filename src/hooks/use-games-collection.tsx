@@ -14,5 +14,3 @@ export function useGamesCollection() {
   const firestore = useFirestore();
   return collection(firestore, GAMES_COLLECTION_NAME).withConverter(converter);
 }
-
-export default useGamesCollection;
