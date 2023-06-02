@@ -7,10 +7,8 @@ type ContentProps = {
 
 export const Content = ({ children }: ContentProps) => {
   return (
-    <div className="flex justify-center bg-gray-100 text-gray-600 min-h-screen">
-      <div className="flex flex-col items-center box-border md:p-4 py-24  max-w-xl w-full">
+    <div className="flex flex-col bg-gray-100 text-gray-600 min-h-screen">
         {children}
-      </div>
     </div>
   );
 };
